@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// src/App.tsx
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setLocation } from './features/location/locationSlice';
+import { setCategories, setProducts } from './features/catalog/catalogSlice';
+import { locationData, categoriesData, productsData } from './data/mockData';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import LocationDetails from '../src/components/LocationDetails/LocationDetails';
+import ProductList from '../src/components/ProductList/ProductList';
 
-function App() {
+const App: React.FC = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setLocation(locationData));
+    dispatch(setCategories(categoriesData));
+    dispatch(setProducts(productsData));
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LocationDetails />} />
+        <Route path="/category/:categoryId" element={<ProductList />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
